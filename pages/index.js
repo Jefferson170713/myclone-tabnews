@@ -1,6 +1,6 @@
 function HomePageTeste() {
     return (
-        <h1>My Eggs</h1>
+        <h1><strong>Rayssinha</strong> Meu anjo conteúdo especial para você! Te amo!</h1>
     )
 }
 
