@@ -65,3 +65,29 @@
   ```
 
 - Recomenda-se criar arquivos de teste com o sufixo `.test.js` ou `.spec.js`.
+
+### 2. Explicação da Pirâmide de Testes
+
+A Pirâmide de Testes é um conceito fundamental em desenvolvimento de software que orienta a distribuição e o foco dos testes automatizados em diferentes níveis. Ela sugere que a maior parte dos testes deve ser composta por testes unitários, seguidos por uma quantidade menor de testes de integração e, por fim, uma quantidade ainda menor de testes de interface (end-to-end).
+
+**Estrutura da Pirâmide:**
+
+- **Base (Testes Unitários):**
+  - Testam pequenas partes isoladas do código, como funções ou métodos.
+  - São rápidos, baratos e fáceis de manter.
+  - Exemplo: testar uma função de soma.
+
+- **Meio (Testes de Integração): Ou Service**
+  - Verificam se diferentes módulos ou componentes funcionam bem juntos.
+  - Podem envolver banco de dados, APIs ou múltiplas partes do sistema.
+  - Exemplo: testar se um serviço consegue salvar e recuperar dados corretamente.
+
+- **Topo (Testes End-to-End): Ou UI**
+  - Simulam o comportamento do usuário na aplicação completa.
+  - São mais lentos, complexos e custosos de manter.
+  - Exemplo: testar o fluxo de login do usuário na interface.
+
+**Resumo:**
+
+A pirâmide sugere priorizar testes unitários, pois são mais rápidos e baratos, garantindo uma base sólida. Testes de integração validam a comunicação entre partes do sistema. Testes end-to-end são importantes, mas devem ser usados com moderação devido ao custo e complexidade.
+- 
