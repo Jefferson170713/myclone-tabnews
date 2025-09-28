@@ -1,5 +1,8 @@
-function somar(argumento1, argunmento2 ) {
-    return argumento1 + argunmento2;
+function somar(numero1, numero2 ) {
+    if (typeof numero1 !== 'number' || typeof numero2 !== 'number') {
+        return "Erro: Argumentos inválidos";
+    }
+    return numero1 + numero2;
 }
 
 exports.somar = somar;
