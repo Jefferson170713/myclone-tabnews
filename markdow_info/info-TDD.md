@@ -9,6 +9,7 @@
   ```bash
   npm install --save--dev jest@29.6.2
   ```
+
 - Agora vamos no arquivo **`package.json`** e adicionar, junto com as dependências que temos `"test": "jest"` e `"test": "jest --watch"`:
 
   ```json
@@ -16,15 +17,17 @@
     "dev": "next dev",
     "lint:check": "prettier --check .",
     "lint:fix": "prettier --write .",
-    "test": "jest", 
+    "test": "jest",
     "test:watch": "jest --watch"
   }
   ```
+
   - Com o comando de `test:watch` o `Jest` fica em modo vigilante e para sair do comando digite `q`.
 
   ```bash
   npm run test:watch
   ```
+
   - **PARA TESTAR VAMOS EXECUTAR O COMANDO**:
 
   ```bash
@@ -36,6 +39,7 @@
   ```bash
   npm view jest versions
   ```
+
   - O Comando acima mostrará todas as versões.
 
 - Para ver qual versão do `Jest` está usando.
@@ -45,13 +49,13 @@
   ```
 
 - Para instalar o Jest como dependência de desenvolvimento, execute:
-  
+
   ```bash
   npm install jest -D
   ```
 
 - Para adicionar um script de teste no `package.json`:
-  
+
   ```json
   "scripts": {
     "test": "jest"
@@ -59,7 +63,7 @@
   ```
 
 - Para rodar os testes, utilize:
-  
+
   ```bash
   npm test
   ```
@@ -90,4 +94,5 @@ A Pirâmide de Testes é um conceito fundamental em desenvolvimento de software 
 **Resumo:**
 
 A pirâmide sugere priorizar testes unitários, pois são mais rápidos e baratos, garantindo uma base sólida. Testes de integração validam a comunicação entre partes do sistema. Testes end-to-end são importantes, mas devem ser usados com moderação devido ao custo e complexidade.
-- 
+
+-

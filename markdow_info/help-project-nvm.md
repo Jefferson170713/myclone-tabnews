@@ -150,4 +150,3 @@ npm run dev         # Roda seu projeto
 npm run lint:check  # Verifica a formatação
 npm run lint:fix    # Corrige a formatação
 ```
-
