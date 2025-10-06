@@ -135,3 +135,111 @@ database-1  | 2025-10-02 14:16:26.616 UTC [1] LOG:  listening on Unix socket "/v
 database-1  | 2025-10-02 14:16:26.621 UTC [24] LOG:  database system was shut down at 2025-10-02 14:09:53 UTC
 databas
 ```
+
+### Se o serviço do banco parou inesperadamente, você pode rodar o comando abaixo para subir o serviço em segundo plano:
+
+- O comando abaixo é usado para listar os processos, e quando os serviços são desligados inesperadamente, eles ainda aparecem na lista de processos, mas com o status "Exited" (saído). Isso indica que o serviço foi iniciado, mas não está mais em execução. E os valores que indicam são 0 ou diferentes de 0. Onde o 0 indica que o serviço foi encerrado corretamente, sem erros. Já os valores diferentes de 0 indicam que houve algum tipo de erro ou problema durante a execução do serviço.
+
+- Para listar todos os containers, incluindo os que estão parados, você pode usar o comando abaixo:
+
+```bash
+docker ps -a 
+```
+
+```bash
+docker ps --all
+```  
+
+- Por convenção existe o exit codes 0, que indica que o processo foi concluído com sucesso, sem erros. Já os códigos diferentes de 0 indicam que houve algum tipo de erro ou problema durante a execução do processo.
+
+- Então você verá a seguinte saída no terminal: 
+
+```bash
+@Jefferson170713 ➜ /workspaces/myclone-tabnews (main) $ docker ps -a
+CONTAINER ID   IMAGE                      COMMAND                  CREATED      STATUS                      PORTS     NAMES
+75cad64ac500   postgres:16.0-alpine3.18   "docker-entrypoint.s…"   4 days ago   Exited (0) 17 seconds ago             myclone-tabnews-database-1                                                                                                 0.8s
+```  
+- Para listar os logs do serviço do banco de dados, você pode usar o comando abaixo:
+
+```bash
+docker logs <container_id>
+```
+- No caso foi **myclone-tabnews-database-1**. Então você verá a seguinte saída no terminal:
+
+```bash
+docker logs myclone-tabnews-database-1
+```
+
+# 3. Rodando o serviço do banco de dados em segundo plano
+
+- Para rodar o serviço do banco de dados em segundo plano, você pode usar o comando abaixo:
+
+```bash
+docker compose up -d
+```
+- Então você verá a seguinte saída no terminal:
+
+```bash
+@Jefferson170713 ➜ /workspaces/myclone-tabnews (main) $ docker compose up -d
+[+] Running 2/2
+ ✔ Network myclone-tabnews_default       Created 
+ ✔ Container myclone-tabnews-database-1  Started
+```
+ - para fechar o serviço do banco de dados, você pode usar o comando abaixo:
+
+```bash
+docker compose down
+```
+- Então você verá a seguinte saída no terminal: 
+
+```bash
+@Jefferson170713 ➜ /workspaces/myclone-tabnews (main) $ docker compose down
+[+] Running 2/2
+ ✔ Container myclone-tabnews-database-1  Removed 
+ ✔ Network myclone-tabnews_default       Removed
+```
+
+- Agora vamos atualizar o pocote de instalador com o comando abaixo:
+
+```bash
+sudo apt update
+```
+### Então vamos instalar o pocote do postgres com o comando abaixo:
+
+```bash
+sudo apt install postgresql-client
+```
+
+# 4. Conectando ao banco de dados Postgres
+
+- Agora vamos conectar ao banco de dados Postgres com o comando abaixo:
+
+```bash
+psql --host=localhost --username=postgres --port=5432
+```
+- Então pede para digitar a senha, que no nosso caso é **local_password**. Então você verá a seguinte saída no terminal:
+- A porta nos definimos no arquivo **compose.yaml**.
+
+- Com isso ele entra no **psql**. Então ele abre uma parte interativa do **psql**. Onde você pode digitar comandos SQL para interagir com o banco de dados Postgres.
+
+```bash
+SELECT 1 + 1;
+```
+- Então você verá a seguinte saída no terminal: 
+
+```bash
+ ?column?
+---------- 2
+(1 row)
+```
+
+- Mostrando que está funcionando e para sair digite o comando abaixo:
+
+```bash
+\q
+```
+
+# 5. Movendo para a pasta backend de **infra** e rodando o serviço do banco de dados:
+```bash
+docker compose -f infra/compose.yaml up -d
+```
