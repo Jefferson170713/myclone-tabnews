@@ -94,3 +94,16 @@ POSTGRES_PASSWORD=local_password # Senha do usuário do banco de dados que defin
 
     export default { query: query, }; // Exporta a função query para ser usada em outros arquivos
 ```
+- 4. Atualmente a resposta do `endpoint` do arquivo `pages/api/v1/status/index.js` de status está assim:
+
+```javascript
+    import database from "../../../../infra/database.js"; // Importa o módulo de banco de dados de forma relativa
+
+    async function status(requerest, response) { // Define a função assíncrona status que recebe os objetos request e response
+        const result = await database.query("SELECT 10 + 7 AS SOMA;"); // Executa uma consulta SQL simples para testar a conexão com o banco de dados
+        console.log(result.rows[0]); // Loga o resultado da consulta no console
+        response.status(200).json({ chave: "(200) - Meu status está ok!" }); // Envia uma resposta JSON com status 200
+    }
+
+    export default status; // Exporta a função status para ser usada em outros arquivos
+``` 
