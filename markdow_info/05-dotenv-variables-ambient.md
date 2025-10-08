@@ -69,7 +69,7 @@ POSTGRES_PASSWORD=local_password # Senha do usuário do banco de dados que defin
       database:
         image: 'postgres:16.0-alpine3.18'
         env_file:
-          - ../.env
+          - ../.env.development
         ports:
           - "5432:5432"
     ```

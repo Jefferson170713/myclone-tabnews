@@ -119,6 +119,16 @@ services:
 ```bash
 docker compose up
 ```
+- Mas no nosso caso, podemos rodar o comando abaixo porque colocamos o arquivo **compose.yaml** dentro da pasta **infra**:
+
+```bash
+docker compose -f infra/compose.yaml up -d
+```
+ou 
+```bash
+docker compose --file infra/compose.yaml up -d
+```
+- O comando **-f** é usado para especificar o caminho do arquivo de configuração do Docker Compose. No nosso caso, o arquivo está localizado na pasta **infra**. E o comando **up** é usado para criar e iniciar os containers definidos no arquivo de configuração. Já o comando **-d** é usado para rodar os containers em segundo plano (detached mode), permitindo que você continue usando o terminal.
 - Então você verá a seguinte saída no terminal, para sair do serviço, use o comando **CTRL + C**:
 
 ```bash
