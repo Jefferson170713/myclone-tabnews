@@ -40,4 +40,10 @@ module.exports = {
 };
 // export { somar, subtrair, dividir };
 // export default { somar, subtrair, dividir };
+// export default {
+//   somar: somar,
+//   subtrair: subtrair,
+//   dividir: dividir,
+//   multiplicar: multiplicar,
+// };
 
