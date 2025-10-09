@@ -14,4 +14,7 @@ async function query(queryObject) {
     return result;
 }
 
-export default { query: query, };
+
+export default { 
+    query: query, 
+};
