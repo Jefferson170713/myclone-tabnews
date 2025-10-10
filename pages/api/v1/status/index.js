@@ -17,5 +17,4 @@ async function status(requerest, response) {
   });
 }
 
-// export default status;
-module.exports = status;
+export default status;
