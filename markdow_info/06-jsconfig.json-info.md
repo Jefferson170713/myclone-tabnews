@@ -9,23 +9,25 @@
 - Sim, o `jsconfig.json` é especificamente projetado para projetos JavaScript. No entanto, se você estiver usando TypeScript, o arquivo equivalente seria o `tsconfig.json`, que oferece funcionalidades semelhantes, mas com suporte adicional para recursos específicos do TypeScript.
 
 ## 2. Estrutura do `jsconfig.json`
+
 - O arquivo `jsconfig.json` é um arquivo JSON que pode conter várias propriedades. Aqui está uma estrutura básica:
 
 ```json
 {
-    "compilerOptions": {
-        "baseUrl": ".", // Define a base para resolver caminhos relativos
-        "paths": {      // Define alias para caminhos de módulos
-            "@components/*": ["src/components/*"],
-            "@utils/*": ["src/utils/*"]
-        },
-        "target": "ES6", // Define a versão do JavaScript alvo
-        "module": "commonjs", // Define o sistema de módulos
-        "allowJs": true, // Permite a inclusão de arquivos JavaScript
-        "checkJs": true  // Habilita a verificação de tipos em arquivos JavaScript
+  "compilerOptions": {
+    "baseUrl": ".", // Define a base para resolver caminhos relativos
+    "paths": {
+      // Define alias para caminhos de módulos
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"]
     },
-    "include": ["src/**/*"], // Especifica os arquivos a serem incluídos no projeto
-    "exclude": ["node_modules", "**/node_modules/*"] // Especifica os arquivos a serem excluídos do projeto
+    "target": "ES6", // Define a versão do JavaScript alvo
+    "module": "commonjs", // Define o sistema de módulos
+    "allowJs": true, // Permite a inclusão de arquivos JavaScript
+    "checkJs": true // Habilita a verificação de tipos em arquivos JavaScript
+  },
+  "include": ["src/**/*"], // Especifica os arquivos a serem incluídos no projeto
+  "exclude": ["node_modules", "**/node_modules/*"] // Especifica os arquivos a serem excluídos do projeto
 }
 ```
 
@@ -50,12 +52,14 @@
 ```bash
 echo {} > jsconfig.json
 ```
-ou 
+
+ou
 
 ```bash
 touch jsconfig.json
 ```
-ou 
+
+ou
 
 ```bash
 code jsconfig.json
@@ -65,13 +69,14 @@ code jsconfig.json
 
 ```json
 {
-    "compilerOptions": {
-        "baseUrl": "."
-    }
+  "compilerOptions": {
+    "baseUrl": "."
+  }
 }
 ```
+
 - Salve o arquivo e agora você pode usar caminhos relativos a partir da raiz do projeto, como mostrado no exemplo abaixo:
 
 ```javascript
 import database from "infra/database.js";
-``` 
+```

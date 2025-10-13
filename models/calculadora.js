@@ -27,16 +27,16 @@ function multiplicar(numero1, numero2) {
     return "Erro: Argumentos inválidos";
   }
   return numero1 * numero2;
-};
+}
 // exports.somar = somar;
 // exports.subtrair = subtrair;
 // exports.dividir = dividir;
 
-module.exports = { 
-  somar, 
-  subtrair, 
-  dividir, 
-  multiplicar
+module.exports = {
+  somar,
+  subtrair,
+  dividir,
+  multiplicar,
 };
 // export { somar, subtrair, dividir };
 // export default { somar, subtrair, dividir };
@@ -46,4 +46,3 @@ module.exports = {
 //   dividir: dividir,
 //   multiplicar: multiplicar,
 // };
-
