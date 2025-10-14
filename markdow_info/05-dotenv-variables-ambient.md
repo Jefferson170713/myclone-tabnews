@@ -113,3 +113,80 @@ async function status(requerest, response) {
 
 export default status; // Exporta a função status para ser usada em outros arquivos
 ```
+## 3 Na variável de ambiente `POSTGRES_HOST` você pode usar o host do banco de dados que está rodando no seu computador local ou o host do banco de dados na nuvem, como o Neon.
+
+- 1. O dados do banco de dados no Neon são:
+
+```yaml
+POSTGRES_HOST=ep-rapid-fire-ad75vboa.c-2.us-east-1.aws.neon.tech
+POSTGRES_PORT=5432
+POSTGRES_USER=neondb_owner
+POSTGRES_DB=neondb
+POSTGRES_PASSWORD=npg_EPew8sVJ6HOi
+```
+
+- 2. E porque fizemos isso?
+
+
+  - Porque assim podemos alternar facilmente entre diferentes ambientes (desenvolvimento local e produção na nuvem) apenas alterando o arquivo `.env.development` ou as variáveis de ambiente, sem precisar modificar o código-fonte do aplicativo. Isso torna o processo de desenvolvimento e implantação mais flexível e seguro.
+
+
+## 4. Configurando SSL para produção
+
+- 1. No site da Neon, o banco de dados exige uma conexão segura (SSL) para se conectar ao banco de dados. Portanto, precisamos configurar o cliente do PostgreSQL para usar SSL quando estivermos em um ambiente de produção. E lá ele ofereceu algo do banco gratuito:
+
+```yaml
+PGHOST='ep-rapid-fire-ad75vboa.c-2.us-east-1.aws.neon.tech'
+PGDATABASE='neondb'
+PGUSER='neondb_owner'
+PGPASSWORD='npg_EPew8sVJ6HOi'
+PGSSLMODE='require'
+PGCHANNELBINDING='require'
+```
+-  E aqui um cuidado pois os valores que precisamos são: `(PGHOST, PGDATABASE, PGUSER, PGPASSWORD)` que representam respectivamente `(POSTGRES_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD)` e então pegamos somente os valores que precisamos e colocamos no nosso arquivo `.env.development` ou `.env.production`:
+
+```yaml
+POSTGRES_HOST=ep-rapid-fire-ad75vboa.c-2.us-east-1.aws.neon.tech
+POSTGRES_PORT=5432
+POSTGRES_USER=neondb_owner
+POSTGRES_DB=neondb
+POSTGRES_PASSWORD=npg_EPew8sVJ6HOi
+NODE_ENV=production
+```
+
+- A variável `NODE_ENV` é uma convenção amplamente utilizada na comunidade de desenvolvimento para indicar o ambiente em que a aplicação está sendo executada. Ela pode assumir diferentes valores, como `development`, `production`, `test`, entre outros, dependendo do estágio do ciclo de vida da aplicação.
+
+- 2. No site da Neon, o banco de dados exige uma conexão segura (SSL) para se conectar ao banco de dados. Portanto, precisamos configurar o cliente do PostgreSQL para usar SSL quando estivermos em um ambiente de produção. Então pegamos as variáveis e iremos inserir no site `vercel` na seção de variáveis de ambiente do projeto.
+
+- No site da `neon`:
+  - ![alt text](image-neon-postgres.png)
+
+- No site da `vercel`:
+  - ![alt text](image-node_env-vercel.png)
+
+- 3. Atualize o arquivo `database.js` para configurar o SSL com base no ambiente:
+
+```javascript
+import { Client } from "pg"; // Importa o cliente do PostgreSQL
+async function query(queryObject) {
+  // Criando a função query que recebe um objeto de consulta
+  const client = new Client({
+    // Cria uma nova instância do cliente do PostgreSQL
+    host: process.env.POSTGRES_HOST, // Usa a variável de ambiente para o host
+    port: process.env.POSTGRES_PORT, // Usa a variável de ambiente para a porta
+    user: process.env.POSTGRES_USER, // Usa a variável de ambiente para o usuário
+    database: process.env.POSTGRES_DB, // Usa a variável de ambiente para o banco de dados
+    password: process.env.POSTGRES_PASSWORD, // Usa a variável de ambiente para a senha
+    ssl: process.env.NODE_ENV === "development" ? false : true, // Configura SSL com base no ambiente
+  });
+  await client.connect(); // Conecta ao banco de dados
+  const result = await client.query(queryObject); // Executa a consulta passada como argumento
+  await client.end(); // Encerra a conexão com o banco de dados
+  return result; // Retorna o resultado da consulta
+}
+
+export default { query: query }; // Exporta a função query para ser usada em outros arquivos
+```
+
+- Agora resta fazer somente saber em qual tipo de banco estamos rodando, se é local ou na nuvem. E para isso usamos a variável de ambiente `NODE_ENV` que definimos no arquivo `.env.development`.
+
