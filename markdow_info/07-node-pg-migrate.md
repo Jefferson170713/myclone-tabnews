@@ -1,6 +1,6 @@
 # Migrations com o Node-pg-migrate
 
-## O que é o Node-pg-migrate?
+## 1. O que é o Node-pg-migrate?
 
 - 1. O Node-pg-migrate é uma ferramenta de migração de banco de dados para PostgreSQL, escrita em Node.js. Ele permite que você gerencie alterações no esquema do banco de dados de forma organizada e controlada. Com o Node-pg-migrate, você pode criar, aplicar e reverter migrações de banco de dados usando scripts JavaScript ou TypeScript. Ele é especialmente útil em projetos onde o esquema do banco de dados está em constante evolução, permitindo que equipes de desenvolvimento mantenham o controle sobre as mudanças e garantam a consistência do banco de dados em diferentes ambientes. 
 
@@ -18,4 +18,48 @@ npm install node-pg-migrate@6.2.2 --save-dev
         "node-pg-migrate": "^6.2.2",
         "prettier": "^3.6.2"
     }
+```
+
+## 2. Criando o script de migração.
+
+- 1. Para criar o script de migração para ser executado, no arquivo `package.json` em `scripts`:
+
+```json
+"scripts": {
+    "dev": "next dev",
+    "dev:run": "npm run services:up && next dev",
+    "services:up": "docker compose -f infra/compose.yaml up -d",
+    "services:stop": "docker compose -f infra/compose.yaml stop",
+    "services:down": "docker compose -f infra/compose.yaml down",
+    "lint:check": "prettier --check .",
+    "lint:fix": "prettier --write .",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "migrate:create": "node-pg-migrate create"
+  }
+```
+
+- 2. Depois vamos executar o comando que acabamos de inserir e daremos um nome a para a migração:
+
+```bash
+npm run migrate:create first-migrate-test
+```
+- 3. Após rodar isso, os arquivos de migração aparecerá os arquivos de migração de acordo `Unix Timestamp` e é assim que as migrações são sempre executadas na ordem pois pegam sempre os miles segundos.
+
+
+- 4. Mas faremos isso direito e como as migrações precisam estar dentro da pasta `infra/migrations` vamos refatorar a parte de **scripts**:
+
+```json
+  "scripts": {
+    "dev": "next dev",
+    "dev:run": "npm run services:up && next dev",
+    "services:up": "docker compose -f infra/compose.yaml up -d",
+    "services:stop": "docker compose -f infra/compose.yaml stop",
+    "services:down": "docker compose -f infra/compose.yaml down",
+    "lint:check": "prettier --check .",
+    "lint:fix": "prettier --write .",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "migrate:create": "node-pg-migrate -m infra/migrations create"
+  }
 ```
