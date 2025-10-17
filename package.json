@@ -24,6 +24,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "node-pg-migrate": "^6.2.2",
     "prettier": "^3.6.2"
   }
 }
