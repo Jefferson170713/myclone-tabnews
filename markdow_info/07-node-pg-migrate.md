@@ -63,3 +63,49 @@ npm run migrate:create first-migrate-test
     "migrate:create": "node-pg-migrate -m infra/migrations create"
   }
 ```
+
+## 3. Passando as credenciais corretas paga o **node-pg-migrate**.
+
+- 1. Para fazer isso é necessário instalar o `dotenv` para fazer o node-pg-migrate se comunicar com o nosso banco de dados que é *POSTGRES*.
+
+- 2. Vamos instalar `dotenv`(Lembrando que o nosso está __`.env.development`__), para o curso iremos usar a versão **"16.4.4"**:
+
+```bash
+npm install dotenv@16.4.4
+```
+
+- 3. Após instalar, faz-se necessário especificar na variável `--envPath` em scripts do arquivo `package.json`:
+
+```json
+  "scripts": {
+    "dev": "next dev",
+    "dev:run": "npm run services:up && next dev",
+    "services:up": "docker compose -f infra/compose.yaml up -d",
+    "services:stop": "docker compose -f infra/compose.yaml stop",
+    "services:down": "docker compose -f infra/compose.yaml down",
+    "lint:check": "prettier --check .",
+    "lint:fix": "prettier --write .",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "migration:create": "node-pg-migrate -m infra/migrations create",
+    "migration:up": "node-pg-migrate -m infra/migrations --envPath .env.development up"
+  }
+```
+
+- 4. feito isso, agora precisamos criar a variável de atributo para o arquivo `.env.development` e com isso o `dotenv` reconhecer a variável e **`DATABASE_URL`**:
+
+```yaml
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=local_user
+POSTGRES_DB=local_db
+POSTGRES_PASSWORD=local_password
+NODE_ENV=development
+DATABASE_URL=postgres://local_user:local_password@localhost:5432/local_db
+```
+
+- 5. Agora é só executar o comando **migration:up**:
+
+```bash
+npm run migration:up
+```
