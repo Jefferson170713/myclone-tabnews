@@ -113,6 +113,7 @@ async function status(requerest, response) {
 
 export default status; // Exporta a função status para ser usada em outros arquivos
 ```
+
 ## 3 Na variável de ambiente `POSTGRES_HOST` você pode usar o host do banco de dados que está rodando no seu computador local ou o host do banco de dados na nuvem, como o Neon.
 
 - 1. O dados do banco de dados no Neon são:
@@ -126,10 +127,7 @@ POSTGRES_PASSWORD=npg_EPew8sVJ6HOi
 ```
 
 - 2. E porque fizemos isso?
-
-
   - Porque assim podemos alternar facilmente entre diferentes ambientes (desenvolvimento local e produção na nuvem) apenas alterando o arquivo `.env.development` ou as variáveis de ambiente, sem precisar modificar o código-fonte do aplicativo. Isso torna o processo de desenvolvimento e implantação mais flexível e seguro.
-
 
 ## 4. Configurando SSL para produção
 
@@ -143,7 +141,8 @@ PGPASSWORD='npg_EPew8sVJ6HOi'
 PGSSLMODE='require'
 PGCHANNELBINDING='require'
 ```
--  E aqui um cuidado pois os valores que precisamos são: `(PGHOST, PGDATABASE, PGUSER, PGPASSWORD)` que representam respectivamente `(POSTGRES_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD)` e então pegamos somente os valores que precisamos e colocamos no nosso arquivo `.env.development` ou `.env.production`:
+
+- E aqui um cuidado pois os valores que precisamos são: `(PGHOST, PGDATABASE, PGUSER, PGPASSWORD)` que representam respectivamente `(POSTGRES_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD)` e então pegamos somente os valores que precisamos e colocamos no nosso arquivo `.env.development` ou `.env.production`:
 
 ```yaml
 POSTGRES_HOST=ep-rapid-fire-ad75vboa.c-2.us-east-1.aws.neon.tech
@@ -189,4 +188,3 @@ export default { query: query }; // Exporta a função query para ser usada em o
 ```
 
 - Agora resta fazer somente saber em qual tipo de banco estamos rodando, se é local ou na nuvem. E para isso usamos a variável de ambiente `NODE_ENV` que definimos no arquivo `.env.development`.
-
