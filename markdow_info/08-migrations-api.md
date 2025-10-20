@@ -37,7 +37,36 @@ export default async function migrations(requerest, response) {
 ```
 ## 3. dividindo a resposta da migração em duas partes (`GET` e `POST`)
 
-- 3.1 Dependendo da resposta da migração o banco de dados irá responder de um jeito diferente.
+- 3.1 `GET` Vamos contruir o método `test/integration/api/v1/migrations/get.test.js`:
+
+```javascript
+test("GET to /api/v1/migrations should return 200", async () => {
+  const response = await fetch("http://localhost:3000/api/v1/migrations");
+  expect(response.status).toBe(200);
+
+  const responseBody = await response.json();
+  console.log(responseBody);
+  expect(Array.isArray(responseBody)).toBe(true);
+});
+
+```
+
+- 3.2 `POST` vamos construir o teste de integração `test/integration/api/v1/migrations/post.test.js`:
+
+```javascript
+test("POST to /api/v1/migrations should return 200", async () => { // No caso aqui seria o método POST
+  const response = await fetch("http://localhost:3000/api/v1/migrations", {
+    method: 'POST', // inserindo qual método é usado
+  });
+  expect(response.status).toBe(200);
+
+  const responseBody = await response.json();
+  console.log(responseBody);
+  expect(Array.isArray(responseBody)).toBe(true);
+});
+```
+
+- 3.3 Dependendo da resposta da migração o banco de dados irá responder de um jeito diferente. Então no arquivo de `pages/api/v1/migrations/index.js`:
 
 ```javascript
 import migrateRunner from "node-pg-migrate";
