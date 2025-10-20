@@ -20,18 +20,59 @@
 - 2.2 Aquivo `pages/api/v1/migrations/index.js`:
 
 ```javascript
-import migrateRunner from "node-pg-migrate"; //Importa a função principal da biblioteca
-import { join } from "node:path"; //mporta a função join do módulo path nativo do Node.js. Ela é usada para construir caminhos de diretórios de forma segura e compatível com diferentes sistemas operacionais (como Windows, Linux e macOS)
+import migrateRunner from "node-pg-migrate"; // Importa a função principal da biblioteca node-pg-migrate.
+import { join } from "node:path"; // Importa a função "join" para unir caminhos de diretórios de forma segura.
 
 export default async function migrations(requerest, response) {
   const migrations = await migrateRunner({
-    databaseUrl: process.env.DATABASE_URL,
-    dryRun: true,
-    dir: join("infra", "migrations"),
-    direction: "up",
-    verbose: true,
-    migrationsTable: "pgmigrations",
+    databaseUrl: process.env.DATABASE_URL, // Pega a URL do banco de dados das variáveis de ambiente.
+    dryRun: true, // Executa a migração em modo de simulação, sem aplicar as alterações no banco.
+    dir: join("infra", "migrations"), // Define o diretório onde os arquivos de migração estão localizados.
+    direction: "up", // Define a direção da migração, "up" para aplicar e "down" para reverter.
+    verbose: true, // Habilita logs detalhados durante a execução da migração.
+    migrationsTable: "pgmigrations", // Define o nome da tabela que controla o histórico de migrações.
   });
   response.status(200).json(migrations);
+}
+```
+## 3. dividindo a resposta da migração em duas partes (`GET` e `POST`)
+
+- 3.1 Dependendo da resposta da migração o banco de dados irá responder de um jeito diferente.
+
+```javascript
+import migrateRunner from "node-pg-migrate";
+import { join } from "node:path";
+
+export default async function migrations(request, response) {
+
+  if (request.method === "GET") {
+    console.log(request.method);
+    const migrations = await migrateRunner({
+      databaseUrl: process.env.DATABASE_URL,
+      dryRun: true,
+      dir: join("infra", "migrations"),
+      direction: "up",
+      verbose: true,
+      migrationsTable: "pgmigrations",
+    });
+
+    return response.status(200).json(migrations);
+  }
+
+  if (request.method === "POST") {
+    console.log(request.method);
+    const migrations = await migrateRunner({
+      databaseUrl: process.env.DATABASE_URL,
+      dryRun: false,
+      dir: join("infra", "migrations"),
+      direction: "up",
+      verbose: true,
+      migrationsTable: "pgmigrations",
+    });
+    
+    return response.status(200).json(migrations);
+  }
+
+  return response.status(405).end();
 }
 ```
