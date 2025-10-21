@@ -2,7 +2,6 @@ import migrateRunner from "node-pg-migrate";
 import { join } from "node:path";
 
 export default async function migrations(request, response) {
-
   if (request.method === "GET") {
     console.log(request.method);
     const migrations = await migrateRunner({
@@ -27,7 +26,7 @@ export default async function migrations(request, response) {
       verbose: true,
       migrationsTable: "pgmigrations",
     });
-    
+
     return response.status(200).json(migrations);
   }
 

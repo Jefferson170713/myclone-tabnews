@@ -35,6 +35,13 @@ export default async function migrations(requerest, response) {
   response.status(200).json(migrations);
 }
 ```
+
+### Nota de Curiosidade: O que é dryRun: true?
+
+`dryRun` (ou "teste a seco") é uma prática de segurança fundamental. Quando **true**, a ferramenta se conecta ao banco, lê a tabela **pgmigrations** para ver o que já foi aplicado, compara com os arquivos na sua pasta dir e retorna um array de quais migrações seriam aplicadas.
+
+Ela não executa nenhuma alteração (nenhum **CREATE TABLE**, **ALTER COLUMN**, etc.). Isso é perfeito para criar um endpoint que apenas verifica o status do banco sem alterá-lo.
+
 ## 3. dividindo a resposta da migração em duas partes (`GET` e `POST`)
 
 - 3.1 `GET` Vamos contruir o método `test/integration/api/v1/migrations/get.test.js`:
@@ -48,15 +55,15 @@ test("GET to /api/v1/migrations should return 200", async () => {
   console.log(responseBody);
   expect(Array.isArray(responseBody)).toBe(true);
 });
-
 ```
 
 - 3.2 `POST` vamos construir o teste de integração `test/integration/api/v1/migrations/post.test.js`:
 
 ```javascript
-test("POST to /api/v1/migrations should return 200", async () => { // No caso aqui seria o método POST
+test("POST to /api/v1/migrations should return 200", async () => {
+  // No caso aqui seria o método POST
   const response = await fetch("http://localhost:3000/api/v1/migrations", {
-    method: 'POST', // inserindo qual método é usado
+    method: "POST", // inserindo qual método é usado
   });
   expect(response.status).toBe(200);
 
@@ -73,7 +80,6 @@ import migrateRunner from "node-pg-migrate";
 import { join } from "node:path";
 
 export default async function migrations(request, response) {
-
   if (request.method === "GET") {
     console.log(request.method);
     const migrations = await migrateRunner({
@@ -98,7 +104,7 @@ export default async function migrations(request, response) {
       verbose: true,
       migrationsTable: "pgmigrations",
     });
-    
+
     return response.status(200).json(migrations);
   }
 
