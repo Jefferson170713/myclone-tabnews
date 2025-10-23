@@ -23,7 +23,6 @@ async function query(queryObject) {
     });
   }
   // Até aqui.
-  
 
   try {
     await client.connect();

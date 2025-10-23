@@ -24,12 +24,13 @@ const jestConfig = createJestConfig({
 
 module.exports = jestConfig;
 ```
+
 - Explicação Simples:
-    - `nextJest`: Usamos uma configuração pronta do Next.js para o Jest, assim não precisamos configurar tudo manualmente.
+  - `nextJest`: Usamos uma configuração pronta do Next.js para o Jest, assim não precisamos configurar tudo manualmente.
 
-    - `moduleDirectories`: Esta é a parte mais importante. Além de procurar códigos em `node_modules`, mandamos o Jest procurar também na raiz do projeto `(<rootDir>)`.
+  - `moduleDirectories`: Esta é a parte mais importante. Além de procurar códigos em `node_modules`, mandamos o Jest procurar também na raiz do projeto `(<rootDir>)`.
 
-    - Por que isso? Isso nos permite usar "imports absolutos". Em vez de import `../../infra/database.js` (complicado), podemos usar import `"infra/database.js"` (limpo e simples) de qualquer arquivo de teste.
+  - Por que isso? Isso nos permite usar "imports absolutos". Em vez de import `../../infra/database.js` (complicado), podemos usar import `"infra/database.js"` (limpo e simples) de qualquer arquivo de teste.
 
 ## 2. No arquivo `database.js`:
 
@@ -72,7 +73,7 @@ function getSSLValues() {
       ca: process.env.POSTGRES_CA,
     };
   }
-  
+
   // Só ligar o SSL (true) se estivermos em "production".
   // Em "development" ou "test" (local), fica desligado (false).
   return process.env.NODE_ENV === "production" ? true : false;
@@ -80,14 +81,13 @@ function getSSLValues() {
 ```
 
 - 2. Explicação:
+  - `getSSLValues()`: Criamos a função getSSLValues() para decidir automaticamente se a conexão com o banco precisa de SSL ou não.
 
-    - `getSSLValues()`: Criamos a função getSSLValues() para decidir automaticamente se a conexão com o banco precisa de SSL ou não.
+  - **Em produção (na nuvem)**: O SSL é ativado (`true`).
 
-    - **Em produção (na nuvem)**: O SSL é ativado (`true`).
+  - **Em desenvolvimento (local) ou testes**: O SSL é desativado (`false`).
 
-    - **Em desenvolvimento (local) ou testes**: O SSL é desativado (`false`).
-
-    - Isso evita erros de conexão quando estamos rodando os testes localmente.
+  - Isso evita erros de conexão quando estamos rodando os testes localmente.
 
 ## 3. No arquivo `post.test.js`:
 
@@ -161,14 +161,14 @@ async function cleanDatabase() {
 test("GET to /api/v1/migrations should return 200", async () => {
   // 1. AÇÃO: Faz uma chamada GET real para a API
   const response = await fetch("http://localhost:3000/api/v1/migrations");
-  
+
   // 2. VERIFICAÇÃO: Confere se a resposta foi "OK" (status 200)
   expect(response.status).toBe(200);
 
   // 3. VERIFICAÇÃO: Confere se o corpo da resposta é um array
   const responseBody = await response.json();
   expect(Array.isArray(responseBody)).toBe(true);
-  
+
   // 4. VERIFICAÇÃO EXTRA: Confere se o array não está vazio
   expect(responseBody.length).toBeGreaterThan(0);
 });
