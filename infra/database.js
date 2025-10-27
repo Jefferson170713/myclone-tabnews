@@ -11,17 +11,17 @@ async function query(queryObject) {
   });
 
   // Isso aqui abaixo não existe é somente para testar
-  if (process.env.NODE_ENV === "test") {
-    console.log({
-      host: process.env.POSTGRES_HOST,
-      port: process.env.POSTGRES_PORT,
-      user: process.env.POSTGRES_USER,
-      database: process.env.POSTGRES_DB,
-      password: process.env.POSTGRES_PASSWORD,
-      ssl: getSSLValues(),
-      "NODE_ENV: ": process.env.NODE_ENV,
-    });
-  }
+  // if (process.env.NODE_ENV === "test") {
+  //   console.log({
+  //     host: process.env.POSTGRES_HOST,
+  //     port: process.env.POSTGRES_PORT,
+  //     user: process.env.POSTGRES_USER,
+  //     database: process.env.POSTGRES_DB,
+  //     password: process.env.POSTGRES_PASSWORD,
+  //     ssl: getSSLValues(),
+  //     "NODE_ENV: ": process.env.NODE_ENV,
+  //   });
+  // }
   // Até aqui.
 
   try {
