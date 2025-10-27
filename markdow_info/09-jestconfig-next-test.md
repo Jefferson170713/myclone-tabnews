@@ -179,3 +179,87 @@ test("GET to /api/v1/migrations should return 200", async () => {
 - A diferença é que aqui fazemos um fetch usando GET (o padrão).
 
 - Adicionamos um teste extra: `expect(responseBody.length).toBeGreaterThan(0)`. Isso verifica se, após rodar o GET (que também executa as migrations), a lista de migrations aplicadas não está vazia.
+
+## 5. No arquivo de `pages/api/v1/migrations/index.js`:
+
+- Colocamos uma variável principal chamada de `defaltMigrationsOptions`. Onde nela colocamos as configuração padrão que o nosso endpoint **migrations** irá responder, se será **POST** ou **GET**.
+
+- Com `...defaltMigrationsOptions`, podemos especificar novamente parâmetros que já estavam setados. Por isso passamos `dryRun: false` em **POST**
+
+
+```javascript
+import migrateRunner from "node-pg-migrate";
+import { join } from "node:path";
+
+export default async function migrations(request, response) {
+  const defaltMigrationsOptions = {
+      databaseUrl: process.env.DATABASE_URL,
+      dryRun: true,
+      dir: join("infra", "migrations"),
+      direction: "up",
+      verbose: true,
+      migrationsTable: "pgmigrations",
+    }
+
+  if (request.method === "GET") {
+    console.log(request.method);
+    const paddingMigrations = await migrateRunner(
+      defaltMigrationsOptions,
+    );
+
+    return response.status(200).json(paddingMigrations);
+  }
+
+  if (request.method === "POST") {
+    console.log(request.method);
+    const migratedMigrations = await migrateRunner({
+      ...defaltMigrationsOptions,
+      dryRun: false,
+  });
+
+    if (migratedMigrations.length > 0) {
+      return response.status(201).json(migratedMigrations);
+    }
+
+    return response.status(200).json(migratedMigrations);
+  }
+
+  return response.status(405).end();
+}
+```
+- 5.1 Dividimos o código do aquivo `test/integration/api/v1/migrations/post.test.js` para ter duas respostas diferentes.
+
+```javascript
+const dotenv = require("dotenv");
+
+dotenv.config({
+  path: ".env.development",
+});
+
+import database from "infra/database.js";
+
+beforeAll(cleanDatabase);
+
+async function cleanDatabase() {
+  await database.query("drop schema public cascade; create schema public;");
+}
+
+test("POST to /api/v1/migrations should return 200", async () => {
+  const response1 = await fetch("http://localhost:3000/api/v1/migrations", {
+    method: "POST",
+  });
+  expect(response1.status).toBe(201);
+  const responseBody1 = await response1.json();
+  console.log(responseBody1);
+  expect(Array.isArray(responseBody1)).toBe(true);
+
+  const response2 = await fetch("http://localhost:3000/api/v1/migrations", {
+    method: "POST",
+  });
+  expect(response2.status).toBe(200);
+
+  const responseBody2 = await response2.json();
+  expect(Array.isArray(responseBody2)).toBe(true);
+  expect(responseBody2.length).toBe(0);
+});  
+```
